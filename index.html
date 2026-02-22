@@ -1,33 +1,271 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<title>Calculator</title>
-<style>
-body{font-family:Arial;text-align:center;margin-top:50px}
-input,button{padding:10px;margin:5px;font-size:18px}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculator | Sheshank</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card: rgba(255,255,255,.06);
+      --line: rgba(255,255,255,.14);
+      --text:#eaf0ff;
+      --muted:#b9c4e6;
+      --accent:#7c5cff;
+      --accent2:#38bdf8;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --r:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:24px;
+      background:
+        radial-gradient(900px 520px at 20% 10%, rgba(124,92,255,.22), transparent 55%),
+        radial-gradient(900px 520px at 85% 30%, rgba(56,189,248,.18), transparent 55%),
+        linear-gradient(180deg, #070b14, var(--bg));
+    }
+    .card{
+      width:min(560px, 100%);
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      padding:22px;
+    }
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:14px;
+    }
+    h1{
+      font-size:22px;
+      margin:0;
+      letter-spacing:-.2px;
+    }
+    .sub{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+    .pill{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--muted);
+      white-space:nowrap;
+    }
+
+    .inputs{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-top:10px;
+    }
+    @media (max-width:520px){
+      .inputs{grid-template-columns:1fr;}
+    }
+    label{
+      font-size:12px;
+      color:var(--muted);
+      display:block;
+      margin:0 0 6px;
+    }
+    input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.18);
+      color:var(--text);
+      font-size:16px;
+      outline:none;
+    }
+    input:focus{
+      border-color:rgba(124,92,255,.55);
+      box-shadow: 0 0 0 4px rgba(124,92,255,.18);
+    }
+
+    .ops{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:10px;
+      margin:16px 0 10px;
+    }
+    button{
+      cursor:pointer;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      border-radius:14px;
+      padding:12px 10px;
+      font-size:16px;
+      font-weight:700;
+      transition:.15s ease;
+    }
+    button:hover{background:rgba(255,255,255,.08)}
+    .primary{
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      border-color:rgba(255,255,255,.18);
+    }
+    .primary:hover{filter:brightness(1.05)}
+    .ghost{
+      background:transparent;
+      color:var(--muted);
+    }
+
+    .result{
+      margin-top:12px;
+      padding:14px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .result b{font-size:14px}
+    .value{
+      font-size:18px;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+    .error{color:#ffb4b4}
+    .hint{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.5;
+    }
+    .row{
+      display:flex;
+      gap:10px;
+      margin-top:12px;
+      flex-wrap:wrap;
+    }
+    .small{
+      padding:10px 12px;
+      font-size:13px;
+      border-radius:12px;
+    }
+  </style>
 </head>
 <body>
-<h2>Calculator</h2>
-<input id="a" type="number">
-<input id="b" type="number"><br>
-<button onclick="calc('+')">+</button>
-<button onclick="calc('-')">-</button>
-<button onclick="calc('*')">*</button>
-<button onclick="calc('/')">/</button>
-<h3 id="result"></h3>
+  <main class="card">
+    <div class="top">
+      <div>
+        <h1>Calculator</h1>
+        <p class="sub">A simple JS calculator with a clean UI.</p>
+      </div>
+      <span class="pill">Keyboard: Enter</span>
+    </div>
 
-<script>
-function calc(op){
-let a=+document.getElementById("a").value
-let b=+document.getElementById("b").value
-let r
-if(op=='+')r=a+b
-if(op=='-')r=a-b
-if(op=='*')r=a*b
-if(op=='/')r=a/b
-document.getElementById("result").innerText="Result: "+r
-}
-</script>
+    <section class="inputs">
+      <div>
+        <label for="a">Number A</label>
+        <input id="a" inputmode="decimal" placeholder="e.g. 12" />
+      </div>
+      <div>
+        <label for="b">Number B</label>
+        <input id="b" inputmode="decimal" placeholder="e.g. 5" />
+      </div>
+    </section>
+
+    <section class="ops" aria-label="Operations">
+      <button class="primary" onclick="calc('+')">+</button>
+      <button class="primary" onclick="calc('-')">−</button>
+      <button class="primary" onclick="calc('*')">×</button>
+      <button class="primary" onclick="calc('/')">÷</button>
+    </section>
+
+    <div class="result" role="status" aria-live="polite">
+      <b>Result</b>
+      <span id="result" class="value">—</span>
+    </div>
+
+    <div class="row">
+      <button class="small ghost" onclick="swap()">Swap A↔B</button>
+      <button class="small ghost" onclick="clearAll()">Clear</button>
+    </div>
+
+    <p class="hint">
+      Tip: Press <b>Enter</b> to calculate with the last operation you used.
+    </p>
+  </main>
+
+  <script>
+    const A = document.getElementById("a");
+    const B = document.getElementById("b");
+    const OUT = document.getElementById("result");
+    let lastOp = "+";
+
+    function toNum(v){
+      // allow decimals, empty -> NaN
+      return Number(String(v).trim());
+    }
+
+    function show(val, isError=false){
+      OUT.textContent = val;
+      OUT.classList.toggle("error", isError);
+    }
+
+    function calc(op){
+      lastOp = op;
+      const a = toNum(A.value);
+      const b = toNum(B.value);
+
+      if (Number.isNaN(a) || Number.isNaN(b)){
+        show("Enter valid numbers", true);
+        return;
+      }
+
+      let r;
+      if (op === "+") r = a + b;
+      if (op === "-") r = a - b;
+      if (op === "*") r = a * b;
+      if (op === "/"){
+        if (b === 0){
+          show("Cannot divide by 0", true);
+          return;
+        }
+        r = a / b;
+      }
+
+      // nice formatting (avoid long decimals)
+      const formatted = Number.isInteger(r) ? String(r) : r.toFixed(6).replace(/\.?0+$/,"");
+      show(formatted, false);
+    }
+
+    function clearAll(){
+      A.value = "";
+      B.value = "";
+      show("—", false);
+      A.focus();
+    }
+
+    function swap(){
+      const t = A.value;
+      A.value = B.value;
+      B.value = t;
+    }
+
+    // Enter key triggers last operation
+    function onEnter(e){
+      if (e.key === "Enter") calc(lastOp);
+    }
+    A.addEventListener("keydown", onEnter);
+    B.addEventListener("keydown", onEnter);
+  </script>
 </body>
 </html>
